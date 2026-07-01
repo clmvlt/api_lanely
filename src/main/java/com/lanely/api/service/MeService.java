@@ -5,6 +5,7 @@ import com.lanely.api.dto.me.MembershipSummary;
 import com.lanely.api.dto.me.ProfileMe;
 import com.lanely.api.dto.me.UserMe;
 import com.lanely.api.entity.Company;
+import com.lanely.api.entity.CompanyMember;
 import com.lanely.api.entity.Profile;
 import com.lanely.api.entity.User;
 import com.lanely.api.exception.ResourceNotFoundException;
@@ -58,5 +59,17 @@ public class MeService {
         Company company = profile.getCompany();
         return MeResponse.ofProfile(new ProfileMe(profile.getId(), profile.getUsername(), profile.getDisplayName(),
                 profile.isActive(), company.getId(), company.getName()));
+    }
+
+    @Transactional(readOnly = true)
+    public MeResponse forDriver(UUID userId, UUID companyId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("error.user.not-found"));
+        Company company = companyMemberRepository.findByCompanyIdAndUserId(companyId, userId)
+                .map(CompanyMember::getCompany)
+                .orElseThrow(() -> new ResourceNotFoundException("error.driver.not-member"));
+        String displayName = UserMapper.displayName(user);
+        return MeResponse.ofProfile(new ProfileMe(user.getId(), displayName, displayName,
+                user.isActive(), company.getId(), company.getName()));
     }
 }

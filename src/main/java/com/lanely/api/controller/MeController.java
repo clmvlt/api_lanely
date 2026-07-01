@@ -155,7 +155,9 @@ public class MeController {
             return meService.forUser(user.userId());
         }
         if (principal instanceof AuthenticatedProfile profile) {
-            return meService.forProfile(profile.profileId());
+            return profile.driver()
+                    ? meService.forDriver(profile.profileId(), profile.companyId())
+                    : meService.forProfile(profile.profileId());
         }
         throw new ResourceNotFoundException("error.me.no-authenticated-account");
     }

@@ -60,11 +60,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 setAuthentication(principal, "ROLE_USER");
             } else if (SubjectType.PROFILE.name().equals(subjectType)) {
                 UUID companyId = UUID.fromString(claims.get("companyId", String.class));
-                AuthenticatedProfile principal = new AuthenticatedProfile(accountId, companyId, claims.get("username", String.class), sessionId);
+                AuthenticatedProfile principal = new AuthenticatedProfile(accountId, companyId, claims.get("username", String.class), sessionId, false);
                 setAuthentication(principal, "ROLE_PROFILE");
             } else if (SubjectType.DRIVER.name().equals(subjectType)) {
                 UUID companyId = UUID.fromString(claims.get("companyId", String.class));
-                AuthenticatedProfile principal = new AuthenticatedProfile(accountId, companyId, claims.get("name", String.class), sessionId);
+                AuthenticatedProfile principal = new AuthenticatedProfile(accountId, companyId, claims.get("name", String.class), sessionId, true);
                 setAuthentication(principal, "ROLE_PROFILE");
             }
         } catch (JwtException | IllegalArgumentException ex) {
