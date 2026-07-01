@@ -13,7 +13,7 @@
 
     <groupId>com.lanely</groupId>
     <artifactId>api-lanely</artifactId>
-    <version>0.0.8</version>
+    <version>0.0.10</version>
     <name>api-lanely</name>
     <description>API Lanely</description>
 
