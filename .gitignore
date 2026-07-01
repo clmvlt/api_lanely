@@ -1,0 +1,45 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### VS Code ###
+.vscode/
+
+### Logs ###
+*.log
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Secrets (vrais identifiants — jamais committés) ###
+*.env
+!*.env.example
+application-local.properties
+*-secret.properties
+
+### Scripts de déploiement (contiennent des identifiants serveur) ###
+deploy
+apilanely-*.jar
+
+### Runtime data (uploads utilisateur — jamais committés) ###
+data/
+
+### Scripts avec token/credentials personnels ###
+scripts/config.ps1
