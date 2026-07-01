@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lanely API</title>
+    <style>
+        :root {
+            --bg: #0f1115;
+            --card: #181b22;
+            --border: #262b36;
+            --text: #e6e8ec;
+            --muted: #8b93a1;
+            --accent: #4f8cff;
+            --accent-hover: #3a78f0;
+            --ok: #3fb950;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            width: 100%;
+            max-width: 460px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--ok);
+            box-shadow: 0 0 10px var(--ok);
+        }
+        h1 { font-size: 20px; font-weight: 600; letter-spacing: 0.2px; }
+        .rows { display: flex; flex-direction: column; gap: 2px; }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .row:last-child { border-bottom: none; }
+        .label { color: var(--muted); font-size: 13px; }
+        .value { font-size: 14px; font-variant-numeric: tabular-nums; font-weight: 500; }
+        .btn {
+            display: block;
+            width: 100%;
+            margin-top: 28px;
+            padding: 13px 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .btn:hover { background: var(--accent-hover); }
+        .footer { margin-top: 16px; text-align: center; color: var(--muted); font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <span class="dot"></span>
+            <h1 id="app-name">Lanely API</h1>
+        </div>
+        <div class="rows">
+            <div class="row"><span class="label">Status</span><span class="value" id="status">—</span></div>
+            <div class="row"><span class="label">Version</span><span class="value" id="version">—</span></div>
+            <div class="row"><span class="label">Environment</span><span class="value" id="environment">—</span></div>
+            <div class="row"><span class="label">Started at</span><span class="value" id="startedAt">—</span></div>
+            <div class="row"><span class="label">Uptime</span><span class="value" id="uptime">—</span></div>
+        </div>
+        <a class="btn" href="/swagger-ui.html">Open API documentation</a>
+        <div class="footer" id="footer"></div>
+    </div>
+
+    <script>
+        async function loadInfos() {
+            try {
+                const response = await fetch("/infos");
+                if (!response.ok) {
+                    throw new Error("HTTP " + response.status);
+                }
+                const data = await response.json();
+                document.getElementById("app-name").textContent = data.application;
+                document.getElementById("status").textContent = data.status;
+                document.getElementById("version").textContent = data.version;
+                document.getElementById("environment").textContent = data.environment;
+                document.getElementById("startedAt").textContent = new Date(data.startedAt).toLocaleString();
+                document.getElementById("uptime").textContent = data.uptime;
+                document.getElementById("footer").textContent = "";
+            } catch (error) {
+                document.getElementById("status").textContent = "DOWN";
+                document.getElementById("footer").textContent = "Could not reach /infos";
+            }
+        }
+
+        loadInfos();
+        setInterval(loadInfos, 5000);
+    </script>
+</body>
+</html>
